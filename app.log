@@ -7,8 +7,12 @@
 [33mPress CTRL+C to quit[0m
  * Restarting with stat
  * Debugger is active!
- * Debugger PIN: 116-325-786
-172.18.0.1 - - [29/Sep/2026 19:02:12] "GET / HTTP/1.1" 200 -
-172.18.0.1 - - [29/Sep/2026 19:02:12] "GET /static/css/style.css HTTP/1.1" 200 -
-172.18.0.1 - - [29/Sep/2026 19:02:12] "GET /static/js/main.js HTTP/1.1" 200 -
-172.18.0.1 - - [29/Sep/2026 19:02:20] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+ * Debugger PIN: 132-703-844
+172.18.0.1 - - [30/Sep/2026 15:11:44] "GET / HTTP/1.1" 200 -
+172.18.0.1 - - [30/Sep/2026 15:11:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [30/Sep/2026 15:11:44] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [30/Sep/2026 15:11:44] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+172.18.0.1 - - [30/Sep/2026 15:11:46] "GET / HTTP/1.1" 200 -
+172.18.0.1 - - [30/Sep/2026 15:11:47] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [30/Sep/2026 15:11:47] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [30/Sep/2026 15:13:25] "GET / HTTP/1.1" 200 -
