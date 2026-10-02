@@ -38,3 +38,13 @@
 172.18.0.1 - - [02/Oct/2026 16:10:39] "GET /terms HTTP/1.1" 200 -
 172.18.0.1 - - [02/Oct/2026 16:10:39] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
 172.18.0.1 - - [02/Oct/2026 16:10:39] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+ * Detected change in '/workspace/expense-tracker/app.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 969-163-803
+172.18.0.1 - - [02/Oct/2026 16:13:38] "GET / HTTP/1.1" 200 -
+172.18.0.1 - - [02/Oct/2026 16:13:38] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [02/Oct/2026 16:13:38] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [02/Oct/2026 16:13:42] "GET /privacy HTTP/1.1" 200 -
+172.18.0.1 - - [02/Oct/2026 16:13:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [02/Oct/2026 16:13:42] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
