@@ -528,3 +528,416 @@ a { color: inherit; text-decoration: none; }
     .nav-links a:not(.nav-cta) { display: none; }
     .hero { padding: 3rem 1rem 2rem; }
 }
+
+
+/* ------------------------------------------------------------------ */
+/* Spendly Landing Page Redesign                                      */
+/* ------------------------------------------------------------------ */
+
+/* Color Variables for Spendly Design */
+:root {
+    --spendly-white: #ffffff;
+    --spendly-off-white: #fafafa;
+    --spendly-black: #111111;
+    --spendly-dark-gray: #222222;
+    --spendly-medium-gray: #666666;
+    --spendly-light-gray: #f7f7f5;
+    --spendly-border-gray: #e0e0e0;
+    --spendly-primary-green: #18a57a;
+    --spendly-light-green: #d4f9e8;
+    --spendly-green-border: #a8e6cf;
+    --spendly-progress-food: #ff9f43;
+    --spendly-progress-travel: #4cc9f0;
+    --spendly-progress-bills: #a29bfe;
+    --spendly-progress-negative: #ff6b6b;
+    --spendly-progress-positive: #4cc9f0;
+    
+    /* Typography */
+    --font-size-badge: 0.875rem;
+    --font-size-hero-title: clamp(3.5rem, 8vw, 4.5rem);
+    --font-size-description: clamp(1.25rem, 3vw, 1.5rem);
+    --font-size-summary-title: 0.875rem;
+    --font-size-summary-value: clamp(1.5rem, 3vw, 2rem);
+    --font-size-summary-indicator: 0.75rem;
+    --font-size-progress-label: 0.875rem;
+    --font-size-button: 0.875rem;
+    
+    /* Spacing */
+    --spacing-top: 4rem;
+    --spacing-badge-to-title: 3.5rem;
+    --spacing-title-to-desc: 2.5rem;
+    --spacing-desc-to-buttons: 3.5rem;
+    --spacing-buttons-to-dashboard: 4.5rem;
+    --spacing-dashboard-internal: 2rem;
+    --spacing-summary-gap: 1.5rem;
+    --spacing-summary-to-progress: 2rem;
+    --spacing-progress-row: 1rem;
+}
+
+/* Hero Section Redesign */
+.hero {
+    background: var(--spendly-white);
+    min-height: 100vh;
+    padding: var(--spacing-top) 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    width: 100%;
+    max-width: 800px;
+    padding: 0 1rem;
+}
+
+/* Hero Badge */
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--spendly-light-green);
+    border: 1px solid var(--spendly-green-border);
+    border-radius: 50px;
+    padding: 0.5rem 1.25rem;
+    margin: 0 auto var(--spacing-badge-to-title);
+}
+
+.badge-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--spendly-primary-green);
+    border-radius: 50%;
+    margin-right: 0.75rem;
+}
+
+.badge-text {
+    font-size: var(--font-size-badge);
+    font-weight: 600;
+    color: var(--spendly-primary-green);
+    letter-spacing: -0.025em;
+}
+
+/* Hero Title */
+.hero-title {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: var(--font-size-hero-title);
+    font-weight: 800;
+    color: var(--spendly-black);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin: 0 0 0.5rem;
+    display: block;
+}
+
+.hero-title-green {
+    color: var(--spendly-primary-green);
+    display: block;
+}
+
+/* Hero Description */
+.hero-description {
+    font-size: var(--font-size-description);
+    font-weight: 400;
+    color: var(--spendly-medium-gray);
+    line-height: 1.6;
+    max-width: 750px;
+    margin: 0 auto var(--spacing-desc-to-buttons);
+}
+
+/* Hero Actions */
+.hero-actions {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    margin: 0 0 var(--spacing-buttons-to-dashboard);
+}
+
+.btn-primary, .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3.5rem;
+    padding: 0 2rem;
+    font-size: var(--font-size-button);
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: var(--spendly-black);
+    color: var(--spendly-white);
+}
+
+.btn-primary:hover {
+    background: var(--spendly-dark-gray);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--spendly-black);
+    border: 1px solid var(--spendly-black);
+}
+
+.btn-secondary:hover {
+    background: var(--spendly-black);
+    color: var(--spendly-white);
+    transform: translateY(-2px);
+}
+
+/* Dashboard Preview */
+.dashboard-preview {
+    width: 100%;
+    max-width: 1000px;
+    background: var(--spendly-light-gray);
+    border: 1px solid var(--spendly-border-gray);
+    border-radius: 24px;
+    padding: 2rem;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Window Controls */
+.dashboard-header {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: var(--spacing-dashboard-internal);
+}
+
+.window-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.window-dot-red { background: #ff6b6b; }
+.window-dot-yellow { background: #ffd166; }
+.window-dot-green { background: #06d6a0; }
+
+/* Summary Cards */
+.dashboard-summary {
+    display: flex;
+    gap: var(--spacing-summary-gap);
+    margin-bottom: var(--spacing-summary-to-progress);
+}
+
+.summary-card {
+    background: var(--spendly-white);
+    border: 1px solid var(--spendly-border-gray);
+    border-radius: 16px;
+    padding: 1.5rem;
+    flex: 1;
+    text-align: center;
+}
+
+.summary-title {
+    font-size: var(--font-size-summary-title);
+    font-weight: 500;
+    color: var(--spendly-medium-gray);
+    margin: 0 0 0.5rem;
+}
+
+.summary-value {
+    font-size: var(--font-size-summary-value);
+    font-weight: 700;
+    color: var(--spendly-black);
+    margin: 0 0 0.5rem;
+}
+
+.summary-indicator {
+    font-size: var(--font-size-summary-indicator);
+    font-weight: 600;
+}
+
+.summary-negative { color: var(--spendly-progress-negative); }
+.summary-positive { color: var(--spendly-progress-positive); }
+.summary-neutral { color: var(--spendly-medium-gray); }
+
+/* Progress Section */
+.dashboard-progress {
+    background: var(--spendly-white);
+    border: 1px solid var(--spendly-border-gray);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.progress-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacing-progress-row);
+}
+
+.progress-label {
+    font-size: var(--font-size-progress-label);
+    font-weight: 500;
+    color: var(--spendly-medium-gray);
+    min-width: 70px;
+    text-align: right;
+    margin-right: 1rem;
+}
+
+.progress-track {
+    flex: 1;
+    height: 14px;
+    background: var(--spendly-border-gray);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.8s ease;
+}
+
+.progress-fill-food { background: var(--spendly-progress-food); }
+.progress-fill-travel { background: var(--spendly-progress-travel); }
+.progress-fill-bills { background: var(--spendly-progress-bills); }
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .dashboard-preview {
+        max-width: 90%;
+        padding: 1.5rem;
+    }
+    
+    .dashboard-summary {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .summary-card {
+        flex: 1 1 45%;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-title {
+        font-size: clamp(2.5rem, 6vw, 3.5rem);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 3rem 1.5rem;
+    }
+    
+    .hero-badge {
+        margin-bottom: 2.5rem;
+        padding: 0.4rem 1rem;
+    }
+    
+    .hero-title {
+        font-size: clamp(2rem, 5vw, 2.5rem);
+        line-height: 1.1;
+    }
+    
+    .hero-description {
+        font-size: clamp(1rem, 4vw, 1.25rem);
+        margin-bottom: 2.5rem;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        max-width: 280px;
+    }
+    
+    .dashboard-preview {
+        padding: 1rem;
+        border-radius: 20px;
+    }
+    
+    .dashboard-summary {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .summary-card {
+        flex: 1;
+    }
+    
+    .progress-label {
+        min-width: 60px;
+        font-size: 0.8rem;
+    }
+    
+    .progress-track {
+        height: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero {
+        padding: 2.5rem 1rem;
+    }
+    
+    .hero-badge {
+        margin-bottom: 2rem;
+    }
+    
+    .hero-title {
+        font-size: clamp(1.75rem, 6vw, 2rem);
+    }
+    
+    .hero-description {
+        font-size: clamp(0.875rem, 4.5vw, 1rem);
+    }
+    
+    .dashboard-preview {
+        border-radius: 16px;
+        padding: 0.75rem;
+    }
+    
+    .window-dot {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .summary-title, .summary-value, .summary-indicator {
+        font-size: 0.875rem;
+    }
+    
+    .progress-label {
+        min-width: 50px;
+        font-size: 0.75rem;
+    }
+    
+    .progress-track {
+        height: 10px;
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* Override existing styles that might conflict                       */
+/* ------------------------------------------------------------------ */
+
+/* Hide the old hero visual and features sections on landing page */
+.hero-visual,
+.features,
+.cta-section {
+    display: none !important;
+}
+
+/* Ensure base styles don't interfere */
+.main-content {
+    min-height: auto;
+}
+
+/* Update base text colors for landing page */
+
+/* ------------------------------------------------------------------ */
+/* Add landing page class to body via JS or update base.html          */
+/* For now, we'll rely on the specificity of our selectors            */
+/* ------------------------------------------------------------------ */
