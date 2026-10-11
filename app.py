@@ -45,6 +45,15 @@ def register():
             return render_template("register.html")
 
         db = get_db()
+        # Check if username or email already exists
+        existing = db.execute(
+            "SELECT id FROM users WHERE username = ? OR email = ?",
+            (username, email)
+        ).fetchone()
+        if existing:
+            flash('Username or email already exists', 'error')
+            return render_template("register.html")
+
         try:
             password_hash = generate_password_hash(password)
             db.execute(

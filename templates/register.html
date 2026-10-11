@@ -13,15 +13,19 @@
         </div>
 
         <div class="auth-card">
-            {% if error %}
-            <div class="auth-error">{{ error }}</div>
-            {% endif %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="auth-error auth-error-{{ category }}">{{ message }}</div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
 
             <form method="POST" action="/register">
                 <div class="form-group">
-                    <label for="name">Full name</label>
-                    <input type="text" id="name" name="name"
-                           class="form-input" placeholder="Nitish Kumar"
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username"
+                           class="form-input" placeholder="Choose a username"
                            required autofocus>
                 </div>
                 <div class="form-group">
