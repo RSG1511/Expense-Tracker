@@ -1,5 +1,6 @@
 import sqlite3
 from flask import g
+from werkzeug.security import generate_password_hash
 
 DATABASE = 'expense_tracker.db'
 
@@ -20,10 +21,10 @@ def init_db():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT UNIQUE NOT NULL,
+                name TEXT NOT NULL,
                 email TEXT UNIQUE NOT NULL,
                 password_hash TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
             )
         ''')
         # Expenses table
@@ -34,9 +35,9 @@ def init_db():
                 title TEXT NOT NULL,
                 amount REAL NOT NULL,
                 category TEXT NOT NULL,
-                date DATE NOT NULL,
+                date TEXT NOT NULL,
                 description TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
             )
         ''')
@@ -50,18 +51,22 @@ def seed_db():
         cursor.execute("SELECT COUNT(*) FROM users")
         if cursor.fetchone()[0] == 0:
             # Hash a sample password
-            from werkzeug.security import generate_password_hash
-            password_hash = generate_password_hash('sample123')
+            password_hash = generate_password_hash('demo123')
             cursor.execute(
-                "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
-                ('sampleuser', 'sample@example.com', password_hash)
+                "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+                ('Demo User', 'demo@spendly.com', password_hash)
             )
             user_id = cursor.lastrowid
-            # Sample expenses
+            # Sample expenses - 8 expenses across all categories
             sample_expenses = [
                 (user_id, 'Groceries', 56.50, 'Food', '2024-01-15', 'Weekly shopping'),
                 (user_id, 'Gasoline', 45.00, 'Transport', '2024-01-16', 'Fill up tank'),
-                (user_id, 'Netflix', 15.99, 'Entertainment', '2024-01-10', 'Monthly subscription'),
+                (user_id, 'Electric Bill', 89.99, 'Bills', '2024-01-14', 'Monthly electricity'),
+                (user_id, 'Gym Membership', 29.99, 'Health', '2024-01-10', 'Monthly subscription'),
+                (user_id, 'Movie Night', 22.50, 'Entertainment', '2024-01-12', 'Weekend movie'),
+                (user_id, 'New Shirt', 34.99, 'Shopping', '2024-01-13', 'Online purchase'),
+                (user_id, 'Internet Bill', 69.99, 'Bills', '2024-01-13', 'Monthly internet'),
+                (user_id, 'Bank Fee', 12.50, 'Other', '2024-01-11', 'Monthly service charge'),
             ]
             cursor.executemany(
                 '''INSERT INTO expenses (user_id, title, amount, category, date, description)
