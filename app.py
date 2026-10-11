@@ -7,14 +7,6 @@ from functools import wraps
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # In production, use environment variable
 
-# Database helper
-def get_db():
-    if 'db' not in g:
-        g.db = sqlite3.connect('expense_tracker.db')
-        g.db.row_factory = sqlite3.Row
-        g.db.execute("PRAGMA foreign_keys = ON")
-    return g.db
-
 @app.teardown_appcontext
 def close_db(error):
     db = g.pop('db', None)
