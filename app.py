@@ -184,6 +184,37 @@ def delete_expense(id):
     flash('Expense deleted successfully!', 'success')
     return redirect(url_for('expenses'))
 
+@app.route("/profile")
+@login_required
+def profile():
+    # Hardcoded data for the profile page (to be replaced with real data in later steps)
+    user_data = {
+        'username': 'demo_user',
+        'email': 'user@example.com',
+        'member_since': 'January 2024'
+    }
+    summary_stats = {
+        'total_spent': 1250.75,
+        'transaction_count': 42,
+        'top_category': 'Food'
+    }
+    recent_transactions = [
+        {'date': '2024-01-15', 'description': 'Weekly Shopping', 'category': 'Food', 'amount': 56.50},
+        {'date': '2024-01-16', 'description': 'Fill Up Tank', 'category': 'Transport', 'amount': 45.00},
+        {'date': '2024-01-10', 'description': 'Monthly Subscription', 'category': 'Entertainment', 'amount': 15.99}
+    ]
+    category_breakdown = [
+        {'category': 'Food', 'total': 420.30},
+        {'category': 'Transport', 'total': 180.00},
+        {'category': 'Entertainment', 'total': 63.96}
+    ]
+    return render_template("profile.html",
+                           user=user_data,
+                           summary=summary_stats,
+                           transactions=recent_transactions,
+                           categories=category_breakdown)
+
+
 # Initialize database
 with app.app_context():
     init_db()

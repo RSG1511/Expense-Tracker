@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}Profile — Spendly{% endblock %}
+{% block content %}
+<style>
+    .profile-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    .profile-card {
+        background: var(--paper-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    .profile-stats {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    .stat-card {
+        background: var(--paper-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        text-align: center;
+        flex: 1;
+    }
+    .stat-title {
+        font-size: 0.875rem;
+        color: var(--ink-muted);
+        margin-bottom: 0.5rem;
+    }
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--ink);
+    }
+    .profile-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+    }
+    .profile-table th,
+    .profile-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border-soft);
+    }
+    .profile-table th {
+        border-bottom: 2px solid var(--border);
+        font-weight: 600;
+    }
+    .category-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    .category-food { background: var(--spendly-light-green); color: var(--spendly-primary-green); }
+    .category-transport { background: var(--spendly-light-gray); color: var(--spendly-medium-gray); }
+    .category-entertainment { background: var(--spendly-light-gray); color: var(--spendly-medium-gray); }
+    .profile-category-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .category-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem;
+        background: var(--paper-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+    }
+</style>
+<section class="auth-section">
+    <div class="profile-container">
+        <!-- User Info Card -->
+        <div class="profile-card">
+            <h2>User Information</h2>
+            <p><strong>Name:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Member since:</strong> {{ user.member_since }}</p>
+        </div>
+
+        <!-- Summary Stats Row -->
+        <div class="profile-stats">
+            <div class="stat-card">
+                <div class="stat-title">Total Spent</div>
+                <div class="stat-value">₹{{ "%.2f"|format(summary.total_spent) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Transactions</div>
+                <div class="stat-value">{{ summary.transaction_count }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Top Category</div>
+                <div class="stat-value">{{ summary.top_category }}</div>
+            </div>
+        </div>
+
+        <!-- Transaction History Table -->
+        <h2>Recent Transactions</h2>
+        <table class="profile-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.description }}</td>
+                    <td>
+                        <span class="category-badge category-{{ transaction.category|lower | replace(' ', '_') }}">{{ transaction.category }}</span>
+                    </td>
+                    <td>₹{{ "%.2f"|format(transaction.amount) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Category Breakdown -->
+        <h2>Category Breakdown</h2>
+        <div class="profile-category-list">
+            {% for category in categories %}
+            <div class="category-item">
+                <span>{{ category.category }}</span>
+                <span>₹{{ "%.2f"|format(category.total) }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
