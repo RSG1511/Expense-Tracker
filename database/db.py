@@ -11,7 +11,7 @@ def get_db():
         db = g._database = sqlite3.connect(DATABASE)
         db.row_factory = sqlite3.Row
         db.execute("PRAGMA foreign_keys = ON")
-    return db
+    return g.db
 
 def init_db():
     """Creates all tables using CREATE TABLE IF NOT EXISTS"""

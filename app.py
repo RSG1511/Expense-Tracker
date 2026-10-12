@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, g
-from database.db import get_db, init_db, seed_db
+from database.db import get_db, init_db, seed_db, get_user_by_username
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from functools import wraps
@@ -74,11 +74,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        db = get_db()
-        user = db.execute(
-            "SELECT * FROM users WHERE username = ?", (username,)
-        ).fetchone()
-
+        user = get_user_by_username(username)
         if user and check_password_hash(user['password_hash'], password):
             session['user_id'] = user['id']
             session['username'] = user['username']
