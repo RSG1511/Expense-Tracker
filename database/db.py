@@ -10,7 +10,7 @@ def get_db():
         db = g._database = sqlite3.connect(DATABASE)
         db.row_factory = sqlite3.Row
         db.execute("PRAGMA foreign_keys = ON")
-    return db
+    return g.db
 
 def init_db():
     """Creates all tables using CREATE TABLE IF NOT EXISTS"""
@@ -69,3 +69,21 @@ def seed_db():
                 sample_expenses
             )
             conn.commit()
+
+def get_user_by_username(username):
+    """Retrieve a user record by username"""
+    with sqlite3.connect(DATABASE) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT id, username, email, password_hash FROM users WHERE username = ?",
+            (username,)
+        )
+        row = cursor.fetchone()
+        if row:
+            return {
+                'id': row[0],
+                'username': row[1],
+                'email': row[2],
+                'password_hash': row[3]
+            }
+        return None
