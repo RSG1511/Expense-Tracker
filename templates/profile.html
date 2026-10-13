@@ -1,79 +1,142 @@
 {% extends "base.html" %}
-
-{% block title %}Profile - Spendly{% endblock %}
-
+{% block title %}Profile — Spendly{% endblock %}
 {% block content %}
-<div class="profile-container">
-    <div class="profile-header">
-        <h1>User Profile</h1>
-    </div>
+<style>
+    .profile-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    .profile-card {
+        background: var(--paper-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+    .profile-stats {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    .stat-card {
+        background: var(--paper-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 1.5rem;
+        text-align: center;
+        flex: 1;
+    }
+    .stat-title {
+        font-size: 0.875rem;
+        color: var(--ink-muted);
+        margin-bottom: 0.5rem;
+    }
+    .stat-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--ink);
+    }
+    .profile-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 2rem;
+    }
+    .profile-table th,
+    .profile-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid var(--border-soft);
+    }
+    .profile-table th {
+        border-bottom: 2px solid var(--border);
+        font-weight: 600;
+    }
+    .category-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    .category-food { background: var(--spendly-light-green); color: var(--spendly-primary-green); }
+    .category-transport { background: var(--spendly-light-gray); color: var(--spendly-medium-gray); }
+    .category-entertainment { background: var(--spendly-light-gray); color: var(--spendly-medium-gray); }
+    .profile-category-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .category-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem;
+        background: var(--paper-card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+    }
+</style>
+<section class="auth-section">
+    <div class="profile-container">
+        <!-- User Info Card -->
+        <div class="profile-card">
+            <h2>User Information</h2>
+            <p><strong>Name:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Member since:</strong> {{ user.member_since }}</p>
+        </div>
 
-    <div class="profile-info">
-        <h2>Account Information</h2>
-        <p><strong>Name:</strong> {{ user_info.name }}</p>
-        <p><strong>Email:</strong> {{ user_info.email }}</p>
-        <p><strong>Member since:</strong> {{ user_info.member_since }}</p>
-    </div>
+        <!-- Summary Stats Row -->
+        <div class="profile-stats">
+            <div class="stat-card">
+                <div class="stat-title">Total Spent</div>
+                <div class="stat-value">₹{{ "%.2f"|format(summary.total_spent) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Transactions</div>
+                <div class="stat-value">{{ summary.transaction_count }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Top Category</div>
+                <div class="stat-value">{{ summary.top_category }}</div>
+            </div>
+        </div>
 
-    <div class="profile-summary">
-        <h2>Summary Statistics</h2>
-        <p><strong>Total spent: ₹{{ "%.2f"|format(summary_stats.total_spent) }}</strong></p>
-        <p><strong>Transaction count: {{ summary_stats.transaction_count }}</strong></p>
-        <p><strong>Top category: {{ summary_stats.top_category }}</strong></p>
-    </div>
-
-    <div class="profile-transactions">
+        <!-- Transaction History Table -->
         <h2>Recent Transactions</h2>
-        {% if transactions %}
-            <table class="transactions-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Amount (₹)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for tx in transactions %}
-                    <tr>
-                        <td>{{ tx.date }}</td>
-                        <td>{{ tx.description }}</td>
-                        <td>{{ tx.category }}</td>
-                        <td>₹{{ "%.2f"|format(tx.amount ) }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p>No transactions found.</p>
-        {% endif %}
-    </div>
+        <table class="profile-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.description }}</td>
+                    <td>
+                        <span class="category-badge category-{{ transaction.category|lower | replace(' ', '_') }}">{{ transaction.category }}</span>
+                    </td>
+                    <td>₹{{ "%.2f"|format(transaction.amount) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-    <div class="profile-category-breakdown">
+        <!-- Category Breakdown -->
         <h2>Category Breakdown</h2>
-        {% if category_breakdown %}
-            <table class="breakdown-table">
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Amount (₹)</th>
-                        <th>Percentage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for cat in category_breakdown %}
-                    <tr>
-                        <td>{{ cat.name }}</td>
-                        <td>₹{{ "%.2f"|format(cat.amount) }}</td>
-                        <td>{{ cat.pct }}%</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p>No category data available.</p>
-        {% endif %}
+        <div class="profile-category-list">
+            {% for category in categories %}
+            <div class="category-item">
+                <span>{{ category.category }}</span>
+                <span>₹{{ "%.2f"|format(category.total) }}</span>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-</div>
+</section>
 {% endblock %}

@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: expense-tracker
+    volumes:
+      - .:/app:cached
+      - /home/ravishankar/.ssh/agent.sock:/tmp/ssh-agent.sock:ro
+    environment:
+      - SSH_AUTH_SOCK=/tmp/ssh-agent.sock
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: >
+      sh -c "
+        if [ -S \"$SSH_AUTH_SOCK\" ]; then
+          echo 'SSH agent is available';
+        else
+          echo 'Waiting for SSH agent...';
+          while [ ! -S \"$SSH_AUTH_SOCK\" ]; do
+            sleep 1;
+          done;
+          echo 'SSH agent is now available';
+        fi &&
+        ssh-add -l >/dev/null 2>&1 && echo 'SSH key loaded successfully' || echo 'Could not load SSH key' &&
+        exec python app.py
+      "
+    working_dir: /app
+    ports:
+      - "5006:5006"
+    stdin_open: true
+    tty: true

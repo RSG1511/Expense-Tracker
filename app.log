@@ -1,3 +1,24 @@
+ * Serving Flask app 'app.py'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5006
+ * Running on http://172.18.0.2:5006
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [05/Oct/2026 18:21:17] code 400, message Bad request version ('À\x13À')
+127.0.0.1 - - [05/Oct/2026 18:21:17] "[31m[1m\x16\x03\x01\x05§\x01\x00\x05£\x03\x03'~H¡`\x96\x97/Óú\x0d«ëGô\x13×\x0b\x0c»\x0c\x18Ðì\x8fn\x11\x1f\x1a\x1e~ç ®\x97¦s§C=\x98g\x84@;»^R\x0cÁ\x84±ÜØ)mb\x1d\x85l*G§~©\x00$\x13\x01\x13\x02\x13\x03À/À+À0À,À'Ì©Ì¨À\x09À\x13À[0m" 400 -
+127.0.0.1 - - [05/Oct/2026 18:21:24] "GET / HTTP/1.1" 200 -
+172.18.0.1 - - [05/Oct/2026 18:22:20] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+172.18.0.1 - - [05/Oct/2026 18:22:39] "GET / HTTP/1.1" 200 -
+172.18.0.1 - - [05/Oct/2026 18:22:39] "GET /static/css/style.css HTTP/1.1" 200 -
+172.18.0.1 - - [05/Oct/2026 18:22:39] "GET /static/js/main.js HTTP/1.1" 200 -
+172.18.0.1 - - [05/Oct/2026 18:22:39] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+172.18.0.1 - - [05/Oct/2026 18:22:42] "GET /terms HTTP/1.1" 200 -
+172.18.0.1 - - [05/Oct/2026 18:22:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [05/Oct/2026 18:22:42] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [05/Oct/2026 18:22:45] "GET /privacy HTTP/1.1" 200 -
+172.18.0.1 - - [05/Oct/2026 18:22:45] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [05/Oct/2026 18:22:45] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
  * Serving Flask app 'app'
  * Debug mode: on
 [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
@@ -7,87 +28,7 @@
 [33mPress CTRL+C to quit[0m
  * Restarting with stat
  * Debugger is active!
- * Debugger PIN: 112-386-095
-172.18.0.1 - - [13/Oct/2026 11:59:00] "GET /expenses/add HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 11:59:00] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 11:59:00] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 11:59:37] "[32mGET / HTTP/1.1[0m" 302 -
-172.18.0.1 - - [13/Oct/2026 11:59:37] "GET /expenses HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 11:59:37] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 11:59:37] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 11:59:40] "GET /expenses/add HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 11:59:40] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 11:59:40] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 11:59:52] "[32mPOST /expenses/add HTTP/1.1[0m" 302 -
-172.18.0.1 - - [13/Oct/2026 11:59:52] "GET /login HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 11:59:52] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 11:59:52] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:02] "POST /login HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 12:00:03] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:03] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:13] "POST /login HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 12:00:13] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:13] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:28] "POST /login HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 12:00:28] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:28] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:29] "GET /register HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 12:00:29] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:29] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:42] "[32mPOST /register HTTP/1.1[0m" 302 -
-172.18.0.1 - - [13/Oct/2026 12:00:42] "GET /login HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 12:00:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:42] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:49] "[32mPOST /login HTTP/1.1[0m" 302 -
-172.18.0.1 - - [13/Oct/2026 12:00:49] "GET /expenses HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 12:00:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:49] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:54] "GET /expenses/add HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 12:00:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:00:55] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:01:19] "[32mPOST /expenses/add HTTP/1.1[0m" 302 -
-172.18.0.1 - - [13/Oct/2026 12:01:19] "GET /expenses HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 12:01:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:01:19] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:31:28] "GET /expenses HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 12:31:28] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:31:28] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:31:31] "GET /profile HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 12:31:31] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 12:31:31] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-Traceback (most recent call last):
-  File [35m"/workspace/expense-tracker/app.py"[0m, line [35m1[0m, in [35m<module>[0m
-    from flask import Flask, render_template, request, redirect, url_for, session, flash, g
-[1;35mModuleNotFoundError[0m: [35mNo module named 'flask'[0m
- * Serving Flask app 'app'
- * Debug mode: on
-[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
- * Running on all addresses (0.0.0.0)
- * Running on http://127.0.0.1:5006
- * Running on http://172.18.0.2:5006
-[33mPress CTRL+C to quit[0m
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 494-752-463
-172.18.0.1 - - [13/Oct/2026 15:56:11] "[32mGET / HTTP/1.1[0m" 302 -
-172.18.0.1 - - [13/Oct/2026 15:56:12] "GET /expenses HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 15:56:12] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 15:56:12] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 15:56:12] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
-127.0.0.1 - - [13/Oct/2026 15:56:32] "GET / HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 15:59:29] "GET / HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 15:59:29] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 15:59:29] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 15:59:36] "GET /login HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 15:59:36] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 15:59:36] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 15:59:50] "[32mPOST /login HTTP/1.1[0m" 302 -
-172.18.0.1 - - [13/Oct/2026 15:59:50] "GET /expenses HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 15:59:50] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 15:59:50] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 15:59:55] "GET /profile HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 15:59:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 15:59:55] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 15:59:58] "GET /expenses HTTP/1.1" 200 -
-172.18.0.1 - - [13/Oct/2026 15:59:58] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [13/Oct/2026 15:59:58] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+ * Debugger PIN: 234-529-475
+172.18.0.1 - - [06/Oct/2026 13:07:53] "GET / HTTP/1.1" 200 -
+172.18.0.1 - - [06/Oct/2026 13:07:53] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [06/Oct/2026 13:07:53] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -

@@ -1,20 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, g
-from database.db import get_db, init_db, seed_db
-from database.queries import get_user_by_id, get_summary_stats, get_recent_transactions, get_category_breakdown
+from database.db import get_db, init_db, seed_db, get_user_by_username
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # In production, use environment variable
-
-# Database helper
-def get_db():
-    if 'db' not in g:
-        g.db = sqlite3.connect('expense_tracker.db')
-        g.db.row_factory = sqlite3.Row
-        g.db.execute("PRAGMA foreign_keys = ON")
-    return g.db
 
 @app.teardown_appcontext
 def close_db(error):
@@ -83,11 +74,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        db = get_db()
-        user = db.execute(
-            "SELECT * FROM users WHERE username = ?", (username,)
-        ).fetchone()
-
+        user = get_user_by_username(username)
         if user and check_password_hash(user['password_hash'], password):
             session['user_id'] = user['id']
             session['username'] = user['username']
@@ -212,6 +199,37 @@ def delete_expense(id):
     db.commit()
     flash('Expense deleted successfully!', 'success')
     return redirect(url_for('expenses'))
+
+@app.route("/profile")
+@login_required
+def profile():
+    # Hardcoded data for the profile page (to be replaced with real data in later steps)
+    user_data = {
+        'username': 'demo_user',
+        'email': 'user@example.com',
+        'member_since': 'January 2024'
+    }
+    summary_stats = {
+        'total_spent': 1250.75,
+        'transaction_count': 42,
+        'top_category': 'Food'
+    }
+    recent_transactions = [
+        {'date': '2024-01-15', 'description': 'Weekly Shopping', 'category': 'Food', 'amount': 56.50},
+        {'date': '2024-01-16', 'description': 'Fill Up Tank', 'category': 'Transport', 'amount': 45.00},
+        {'date': '2024-01-10', 'description': 'Monthly Subscription', 'category': 'Entertainment', 'amount': 15.99}
+    ]
+    category_breakdown = [
+        {'category': 'Food', 'total': 420.30},
+        {'category': 'Transport', 'total': 180.00},
+        {'category': 'Entertainment', 'total': 63.96}
+    ]
+    return render_template("profile.html",
+                           user=user_data,
+                           summary=summary_stats,
+                           transactions=recent_transactions,
+                           categories=category_breakdown)
+
 
 # Initialize database
 with app.app_context():
