@@ -91,6 +91,23 @@ def logout():
     flash('You have been logged out', 'info')
     return redirect(url_for('landing'))
 
+
+@app.route("/profile")
+@login_required
+def profile():
+    user_info = get_user_by_id(session['user_id'])
+    if not user_info:
+        flash('User not found', 'error')
+        return redirect(url_for('landing'))
+    summary_stats = get_summary_stats(session['user_id'])
+    transactions = get_recent_transactions(session['user_id'])
+    category_breakdown = get_category_breakdown(session['user_id'])
+    return render_template("profile.html",
+                           user_info=user_info,
+                           summary_stats=summary_stats,
+                           transactions=transactions,
+                           category_breakdown=category_breakdown)
+
 @app.route("/expenses")
 @login_required
 def expenses():
@@ -115,10 +132,21 @@ def add_expense():
             flash('Title, amount, category, and date are required', 'error')
             return render_template("add_expense.html")
 
+        user_id = session.get('user_id')
+        if user_id is None:
+            flash('Please log in to access this page.', 'error')
+            return redirect(url_for('login'))
         db = get_db()
+        # Verify user exists
+        user = db.execute('SELECT id FROM users WHERE id = ?', (user_id,)).fetchone()
+        if user is None:
+            session.clear()
+            flash('Invalid user session. Please log in again.', 'error')
+            return redirect(url_for('login'))
+
         db.execute(
             "INSERT INTO expenses (user_id, title, amount, category, date, description) VALUES (?, ?, ?, ?, ?, ?)",
-            (session['user_id'], title, amount, category, date, description)
+            (user_id, title, amount, category, date, description)
         )
         db.commit()
         flash('Expense added successfully!', 'success')
