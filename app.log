@@ -7,7 +7,56 @@
 [33mPress CTRL+C to quit[0m
  * Restarting with stat
  * Debugger is active!
- * Debugger PIN: 114-633-056
-172.18.0.1 - - [12/Oct/2026 11:57:06] "GET / HTTP/1.1" 200 -
-172.18.0.1 - - [12/Oct/2026 11:57:06] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
-172.18.0.1 - - [12/Oct/2026 11:57:06] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+ * Debugger PIN: 426-506-855
+172.18.0.1 - - [13/Oct/2026 09:57:30] "GET / HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 09:57:30] "GET /static/css/style.css HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 09:57:30] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 09:57:30] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+172.18.0.1 - - [13/Oct/2026 10:12:50] "GET /login HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:12:51] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:12:51] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:12:57] "POST /login HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:12:57] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:12:57] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:13:03] "POST /login HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:13:03] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:13:03] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:13:11] "POST /login HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:13:11] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:13:11] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:13:25] "POST /login HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:13:25] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:13:25] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:13:29] "GET /register HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:13:29] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:13:29] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:13:53] "POST /register HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:13:53] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:13:53] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:00] "GET /login HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:14:00] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:00] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:06] "POST /login HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:14:06] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:06] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:15] "[32mPOST /login HTTP/1.1[0m" 302 -
+172.18.0.1 - - [13/Oct/2026 10:14:15] "GET /expenses HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:14:15] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:15] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:22] "GET /expenses HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:14:22] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:22] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:30] "GET /expenses HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:14:30] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:33] "GET /expenses/add HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:14:33] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:33] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:36] "GET /expenses/add HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:14:36] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:14:36] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:19:01] "[33mGET /profile HTTP/1.1[0m" 404 -
+172.18.0.1 - - [13/Oct/2026 10:19:13] "[32mGET / HTTP/1.1[0m" 302 -
+172.18.0.1 - - [13/Oct/2026 10:19:13] "GET /expenses HTTP/1.1" 200 -
+172.18.0.1 - - [13/Oct/2026 10:19:13] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+172.18.0.1 - - [13/Oct/2026 10:19:13] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
