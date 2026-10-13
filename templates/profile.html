@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - Spendly{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>User Profile</h1>
+    </div>
+
+    <div class="profile-info">
+        <h2>Account Information</h2>
+        <p><strong>Name:</strong> {{ user_info.name }}</p>
+        <p><strong>Email:</strong> {{ user_info.email }}</p>
+        <p><strong>Member since:</strong> {{ user_info.member_since }}</p>
+    </div>
+
+    <div class="profile-summary">
+        <h2>Summary Statistics</h2>
+        <p><strong>Total spent: ₹{{ "%.2f"|format(summary_stats.total_spent) }}</strong></p>
+        <p><strong>Transaction count: {{ summary_stats.transaction_count }}</strong></p>
+        <p><strong>Top category: {{ summary_stats.top_category }}</strong></p>
+    </div>
+
+    <div class="profile-transactions">
+        <h2>Recent Transactions</h2>
+        {% if transactions %}
+            <table class="transactions-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Amount (₹)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tx in transactions %}
+                    <tr>
+                        <td>{{ tx.date }}</td>
+                        <td>{{ tx.description }}</td>
+                        <td>{{ tx.category }}</td>
+                        <td>₹{{ "%.2f"|format(tx.amount ) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No transactions found.</p>
+        {% endif %}
+    </div>
+
+    <div class="profile-category-breakdown">
+        <h2>Category Breakdown</h2>
+        {% if category_breakdown %}
+            <table class="breakdown-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Amount (₹)</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cat in category_breakdown %}
+                    <tr>
+                        <td>{{ cat.name }}</td>
+                        <td>₹{{ "%.2f"|format(cat.amount) }}</td>
+                        <td>{{ cat.pct }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No category data available.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

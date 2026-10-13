@@ -22,6 +22,7 @@
                 {% if session.user_id %}
                     <a href="{{ url_for('expenses') }}">Expenses</a>
                     <a href="{{ url_for('logout') }}">Logout</a>
+                    <a href="{{ url_for('profile') }}">Profile</a>
                     <span>{{ session.username }}</span>
                 {% else %}
                     <a href="{{ url_for('login') }}">Sign in</a>
