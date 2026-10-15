@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Profile — Spendly{% endblock %}
+{% block content %}
+<section class="auth-section">
+    <div class="profile-container">
+        {% if date_error %}
+        <div class="filter-error">{{ date_error }}</div>
+        {% endif %}
+        <div class="filter-bar">
+            <div>
+                <strong>Filter by Date:</strong>
+            </div>
+            <!-- Preset Buttons -->
+            <a href="{{ url_for('profile') }}" class="preset-btn {% if not date_from and not date_to %}active{% endif %}">All Time</a>
+            <a href="{{ url_for('profile', date_from=today_start, date_to=today_end) }}" class="preset-btn {% if date_from == today_start and date_to == today_end %}active{% endif %}">Today</a>
+            <a href="{{ url_for('profile', date_from=week_start, date_to=today_end) }}" class="preset-btn {% if date_from == week_start and date_to == today_end %}active{% endif %}">This Week</a>
+            <a href="{{ url_for('profile', date_from=month_start, date_to=today_end) }}" class="preset-btn {% if date_from == month_start and date_to == today_end %}active{% endif %}">This Month</a>
+            <a href="{{ url_for('profile', date_from=three_months_start, date_to=today_end) }}" class="preset-btn {% if date_from == three_months_start and date_to == today_end %}active{% endif %}">Last 3 Months</a>
+            <a href="{{ url_for('profile', date_from=six_months_start, date_to=today_end) }}" class="preset-btn {% if date_from == six_months_start and date_to == today_end %}active{% endif %}">Last 6 Months</a>
+
+            <!-- Custom Range -->
+            <div class="custom-range">
+                <input type="date" name="date_from" value="{{ date_from or '' }}">
+                <input type="date" name="date_to" value="{{ date_to or '' }}">
+                <button type="submit">Apply</button>
+            </div>
+        </div>
+        <!-- User Info Card -->
+        <div class="profile-card">
+            <h2>User Information</h2>
+            <p><strong>Name:</strong> {{ user.username }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Member since:</strong> {{ user.member_since }}</p>
+        </div>
+
+        <!-- Summary Stats Row -->
+        <div class="profile-stats">
+            <div class="stat-card">
+                <div class="stat-title">Total Spent</div>
+                <div class="stat-value">₹{{ "%.2f"|format(summary.total_spent) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Transactions</div>
+                <div class="stat-value">{{ summary.transaction_count }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Top Category</div>
+                <div class="stat-value">{{ summary.top_category }}</div>
+            </div>
+        </div>
+
+        <!-- Transaction History Table -->
+        <h2>Recent Transactions</h2>
+        <table class="profile-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction.date }}</td>
+                    <td>{{ transaction.description }}</td>
+                    <td>
+                        <span class="category-badge category-{{ transaction.category|lower | replace(' ', '_') }}">{{ transaction.category }}</span>
+                    </td>
+                    <td>₹{{ "%.2f"|format(transaction.amount) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Category Breakdown -->
+        <h2>Category Breakdown</h2>
+        <div class="profile-category-list">
+            {% for category in categories %}
+            <div class="category-item">
+                <span>{{ category.category }}</span>
+                <span>₹{{ "%.2f"|format(category.total) }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

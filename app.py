@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, g
-from database.db import get_db, init_db, seed_db, get_user_by_username, get_user_by_id, get_summary_stats, get_recent_transactions, get_category_breakdown
+from database.db import get_db, init_db, seed_db, get_user_by_username, get_user_by_id
+from database.queries import get_summary_stats, get_recent_transactions, get_category_breakdown
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import math
@@ -97,20 +98,77 @@ def logout():
 @app.route("/profile")
 @login_required
 def profile():
+    # Handle date filtering
+    date_from = request.args.get('date_from', '')
+    date_to = request.args.get('date_to', '')
+
+    # Validate date parameters
+    validated_date_from = None
+    validated_date_to = None
+    date_error = None
+
+    if date_from:
+        try:
+            datetime.datetime.strptime(date_from, '%Y-%m-%d')
+            validated_date_from = date_from
+        except ValueError:
+            pass  # Invalid date, treat as absent
+
+    if date_to:
+        try:
+            datetime.datetime.strptime(date_to, '%Y-%m-%d')
+            validated_date_to = date_to
+        except ValueError:
+            pass  # Invalid date, treat as absent
+
+    # Check if date_from > date_to when both are valid
+    if validated_date_from and validated_date_to:
+        if validated_date_from > validated_date_to:
+            date_error = 'Start date must be before end date.'
+            validated_date_from = None
+            validated_date_to = None
+
+    # Calculate preset date ranges for template
+    today = datetime.date.today()
+    today_start = today.strftime('%Y-%m-%d')
+    today_end = today.strftime('%Y-%m-%d')
+
+    # This week (starting Monday)
+    week_start = today - datetime.timedelta(days=today.weekday())
+    week_start_str = week_start.strftime('%Y-%m-%d')
+
+    # This month (first day of current month)
+    month_start = today.replace(day=1).strftime('%Y-%m-%d')
+
+    # Last 3 months (approximately 90 days ago)
+    three_months_start = (today - datetime.timedelta(days=90)).strftime('%Y-%m-%d')
+
+    # Last 6 months (approximately 180 days ago)
+    six_months_start = (today - datetime.timedelta(days=180)).strftime('%Y-%m-%d')
+
     user = get_user_by_id(session['user_id'])
     if not user:
         flash('User not found', 'error')
         return redirect(url_for('landing'))
     # Add member_since field for template compatibility (maps to created_at)
     user['member_since'] = user.get('created_at')
-    summary = get_summary_stats(session['user_id'])
-    transactions = get_recent_transactions(session['user_id'])
-    categories = get_category_breakdown(session['user_id'])
+    summary = get_summary_stats(session['user_id'], validated_date_from, validated_date_to)
+    transactions = get_recent_transactions(session['user_id'], 10, validated_date_from, validated_date_to)
+    categories = get_category_breakdown(session['user_id'], validated_date_from, validated_date_to)
     return render_template("profile.html",
                            user=user,
                            summary=summary,
                            transactions=transactions,
-                           categories=categories)
+                           categories=categories,
+                           date_from=validated_date_from,
+                           date_to=validated_date_to,
+                           date_error=date_error,
+                           today_start=today_start,
+                           today_end=today_end,
+                           week_start=week_start_str,
+                           month_start=month_start,
+                           three_months_start=three_months_start,
+                           six_months_start=six_months_start)
 
 @app.route("/expenses")
 @login_required
