@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, g
-from database.db import get_db, init_db, seed_db, get_user_by_username
+from database.db import get_db, init_db, seed_db, get_user_by_username, get_user_by_id
+from database.queries import get_summary_stats, get_recent_transactions, get_category_breakdown
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
+import math
+import datetime
 from functools import wraps
 
 app = Flask(__name__)
@@ -9,7 +12,7 @@ app.secret_key = 'your_secret_key_here'  # In production, use environment variab
 
 @app.teardown_appcontext
 def close_db(error):
-    db = g.pop('db', None)
+    db = g.pop('_database', None)
     if db is not None:
         db.close()
 
@@ -95,18 +98,77 @@ def logout():
 @app.route("/profile")
 @login_required
 def profile():
-    user_info = get_user_by_id(session['user_id'])
-    if not user_info:
+    # Handle date filtering
+    date_from = request.args.get('date_from', '')
+    date_to = request.args.get('date_to', '')
+
+    # Validate date parameters
+    validated_date_from = None
+    validated_date_to = None
+    date_error = None
+
+    if date_from:
+        try:
+            datetime.datetime.strptime(date_from, '%Y-%m-%d')
+            validated_date_from = date_from
+        except ValueError:
+            pass  # Invalid date, treat as absent
+
+    if date_to:
+        try:
+            datetime.datetime.strptime(date_to, '%Y-%m-%d')
+            validated_date_to = date_to
+        except ValueError:
+            pass  # Invalid date, treat as absent
+
+    # Check if date_from > date_to when both are valid
+    if validated_date_from and validated_date_to:
+        if validated_date_from > validated_date_to:
+            date_error = 'Start date must be before end date.'
+            validated_date_from = None
+            validated_date_to = None
+
+    # Calculate preset date ranges for template
+    today = datetime.date.today()
+    today_start = today.strftime('%Y-%m-%d')
+    today_end = today.strftime('%Y-%m-%d')
+
+    # This week (starting Monday)
+    week_start = today - datetime.timedelta(days=today.weekday())
+    week_start_str = week_start.strftime('%Y-%m-%d')
+
+    # This month (first day of current month)
+    month_start = today.replace(day=1).strftime('%Y-%m-%d')
+
+    # Last 3 months (approximately 90 days ago)
+    three_months_start = (today - datetime.timedelta(days=90)).strftime('%Y-%m-%d')
+
+    # Last 6 months (approximately 180 days ago)
+    six_months_start = (today - datetime.timedelta(days=180)).strftime('%Y-%m-%d')
+
+    user = get_user_by_id(session['user_id'])
+    if not user:
         flash('User not found', 'error')
         return redirect(url_for('landing'))
-    summary_stats = get_summary_stats(session['user_id'])
-    transactions = get_recent_transactions(session['user_id'])
-    category_breakdown = get_category_breakdown(session['user_id'])
+    # Add member_since field for template compatibility (maps to created_at)
+    user['member_since'] = user.get('created_at')
+    summary = get_summary_stats(session['user_id'], validated_date_from, validated_date_to)
+    transactions = get_recent_transactions(session['user_id'], 10, validated_date_from, validated_date_to)
+    categories = get_category_breakdown(session['user_id'], validated_date_from, validated_date_to)
     return render_template("profile.html",
-                           user_info=user_info,
-                           summary_stats=summary_stats,
+                           user=user,
+                           summary=summary,
                            transactions=transactions,
-                           category_breakdown=category_breakdown)
+                           categories=categories,
+                           date_from=validated_date_from,
+                           date_to=validated_date_to,
+                           date_error=date_error,
+                           today_start=today_start,
+                           today_end=today_end,
+                           week_start=week_start_str,
+                           month_start=month_start,
+                           three_months_start=three_months_start,
+                           six_months_start=six_months_start)
 
 @app.route("/expenses")
 @login_required
@@ -123,13 +185,29 @@ def expenses():
 def add_expense():
     if request.method == 'POST':
         title = request.form['title']
-        amount = request.form['amount']
+        amount = request.form['amount'].strip()
         category = request.form['category']
-        date = request.form['date']
+        date = request.form['date'].strip()
         description = request.form['description']
 
         if not title or not amount or not category or not date:
             flash('Title, amount, category, and date are required', 'error')
+            return render_template("add_expense.html")
+
+        # Validate amount
+        try:
+            amount_float = float(amount)
+            if not math.isfinite(amount_float) or amount_float <= 0:
+                raise ValueError
+        except ValueError:
+            flash('Amount must be a positive number', 'error')
+            return render_template("add_expense.html")
+
+        # Validate date
+        try:
+            datetime.datetime.strptime(date, '%Y-%m-%d')
+        except ValueError:
+            flash('Date must be a valid YYYY-MM-DD date', 'error')
             return render_template("add_expense.html")
 
         user_id = session.get('user_id')
@@ -169,13 +247,29 @@ def edit_expense(id):
 
     if request.method == 'POST':
         title = request.form['title']
-        amount = request.form['amount']
+        amount = request.form['amount'].strip()
         category = request.form['category']
-        date = request.form['date']
+        date = request.form['date'].strip()
         description = request.form['description']
 
         if not title or not amount or not category or not date:
             flash('Title, amount, category, and date are required', 'error')
+            return render_template("edit_expense.html", expense=expense)
+
+        # Validate amount
+        try:
+            amount_float = float(amount)
+            if not math.isfinite(amount_float) or amount_float <= 0:
+                raise ValueError
+        except ValueError:
+            flash('Amount must be a positive number', 'error')
+            return render_template("edit_expense.html", expense=expense)
+
+        # Validate date
+        try:
+            datetime.datetime.strptime(date, '%Y-%m-%d')
+        except ValueError:
+            flash('Date must be a valid YYYY-MM-DD date', 'error')
             return render_template("edit_expense.html", expense=expense)
 
         db.execute(
@@ -199,36 +293,6 @@ def delete_expense(id):
     db.commit()
     flash('Expense deleted successfully!', 'success')
     return redirect(url_for('expenses'))
-
-@app.route("/profile")
-@login_required
-def profile():
-    # Hardcoded data for the profile page (to be replaced with real data in later steps)
-    user_data = {
-        'username': 'demo_user',
-        'email': 'user@example.com',
-        'member_since': 'January 2024'
-    }
-    summary_stats = {
-        'total_spent': 1250.75,
-        'transaction_count': 42,
-        'top_category': 'Food'
-    }
-    recent_transactions = [
-        {'date': '2024-01-15', 'description': 'Weekly Shopping', 'category': 'Food', 'amount': 56.50},
-        {'date': '2024-01-16', 'description': 'Fill Up Tank', 'category': 'Transport', 'amount': 45.00},
-        {'date': '2024-01-10', 'description': 'Monthly Subscription', 'category': 'Entertainment', 'amount': 15.99}
-    ]
-    category_breakdown = [
-        {'category': 'Food', 'total': 420.30},
-        {'category': 'Transport', 'total': 180.00},
-        {'category': 'Entertainment', 'total': 63.96}
-    ]
-    return render_template("profile.html",
-                           user=user_data,
-                           summary=summary_stats,
-                           transactions=recent_transactions,
-                           categories=category_breakdown)
 
 
 # Initialize database

@@ -1,0 +1,147 @@
+from database.db import get_db
+from datetime import datetime
+from flask import g
+
+
+def get_user_by_id(user_id):
+    """Get user information by ID."""
+    db = get_db()
+    try:
+        row = db.execute(
+            '''SELECT username as name, email, created_at
+               FROM users
+               WHERE id = ?''',
+            (user_id,)
+        ).fetchone()
+        if not row:
+            return None
+        # Format member_since as "Month YYYY"
+        created_at = datetime.strptime(row['created_at'], '%Y-%m-%d %H:%M:%S')
+        member_since = created_at.strftime('%B %Y')
+        return {
+            'name': row['name'],
+            'email': row['email'],
+            'member_since': member_since
+        }
+    finally:
+        db.close()
+        g._database = None
+
+
+def get_summary_stats(user_id, date_from=None, date_to=None):
+    """Get summary statistics for a user's expenses."""
+    db = get_db()
+    try:
+        query = '''SELECT
+                       COALESCE(SUM(amount), 0) as total_spent,
+                       COUNT(*) as transaction_count
+                   FROM expenses
+                   WHERE user_id = ?'''
+        params = [user_id]
+
+        if date_from and date_to:
+            query += ' AND date BETWEEN ? AND ?'
+            params.extend([date_from, date_to])
+
+        row = db.execute(query, params).fetchone()
+        total_spent = row['total_spent']
+        transaction_count = row['transaction_count']
+
+        # Get top category
+        top_category_query = '''SELECT category, SUM(amount) as cat_total
+                               FROM expenses
+                               WHERE user_id = ?'''
+        top_category_params = [user_id]
+        if date_from and date_to:
+            top_category_query += ' AND date BETWEEN ? AND ?'
+            top_category_params.extend([date_from, date_to])
+        top_category_query += ''' GROUP BY category
+                                 ORDER BY cat_total DESC
+                                 LIMIT 1'''
+
+        top_category_row = db.execute(top_category_query, top_category_params).fetchone()
+        top_category = top_category_row['category'] if top_category_row and total_spent > 0 else "—"
+
+        return {
+            'total_spent': total_spent,
+            'transaction_count': transaction_count,
+            'top_category': top_category
+        }
+    finally:
+        db.close()
+        g._database = None
+
+
+def get_recent_transactions(user_id, limit=10, date_from=None, date_to=None):
+    """Get recent transactions for a user."""
+    db = get_db()
+    try:
+        query = '''SELECT date, description, category, amount
+                   FROM expenses
+                   WHERE user_id = ?'''
+        params = [user_id]
+
+        if date_from and date_to:
+            query += ' AND date BETWEEN ? AND ?'
+            params.extend([date_from, date_to])
+
+        query += ''' ORDER BY date DESC
+                     LIMIT ?'''
+        params.append(limit)
+
+        rows = db.execute(query, params).fetchall()
+        # Convert rows to list of dicts
+        return [dict(row) for row in rows]
+    finally:
+        db.close()
+        g._database = None
+
+
+def get_category_breakdown(user_id, date_from=None, date_to=None):
+    """Get category breakdown for a user's expenses."""
+    db = get_db()
+    try:
+        query = '''SELECT category, SUM(amount) as total
+                   FROM expenses
+                   WHERE user_id = ?'''
+        params = [user_id]
+
+        if date_from and date_to:
+            query += ' AND date BETWEEN ? AND ?'
+            params.extend([date_from, date_to])
+        query += ' GROUP BY category'
+
+        rows = db.execute(query, params).fetchall()
+
+        if not rows:
+            return []
+
+        # Calculate total spent
+        total_spent = sum(row['total'] for row in rows)
+        if total_spent == 0:
+            return []
+
+        # Build list with percentages
+        result = []
+        for row in rows:
+            pct = round((row['total'] / total_spent) * 100)
+            result.append({
+                'name': row['category'],
+                'amount': row['total'],
+                'pct': pct
+            })
+
+        # Sort by amount descending
+        result.sort(key=lambda x: x['amount'], reverse=True)
+
+        # Adjust percentages to sum to 100
+        total_pct = sum(item['pct'] for item in result)
+        if total_pct != 100 and result:
+            diff = 100 - total_pct
+            # Add difference to the largest category (first item)
+            result[0]['pct'] += diff
+
+        return result
+    finally:
+        db.close()
+        g._database = None
