@@ -11,7 +11,7 @@ def get_db():
         db = g._database = sqlite3.connect(DATABASE)
         db.row_factory = sqlite3.Row
         db.execute("PRAGMA foreign_keys = ON")
-    return g.db
+    return g._database
 
 def init_db():
     """Creates all tables using CREATE TABLE IF NOT EXISTS"""
@@ -21,10 +21,10 @@ def init_db():
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL,
+                username TEXT UNIQUE NOT NULL,
                 email TEXT UNIQUE NOT NULL,
                 password_hash TEXT NOT NULL,
-                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ''')
         # Expenses table
@@ -35,9 +35,9 @@ def init_db():
                 title TEXT NOT NULL,
                 amount REAL NOT NULL,
                 category TEXT NOT NULL,
-                date TEXT NOT NULL,
+                date DATE NOT NULL,
                 description TEXT,
-                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
             )
         ''')
@@ -53,7 +53,7 @@ def seed_db():
             # Hash a sample password
             password_hash = generate_password_hash('demo123')
             cursor.execute(
-                "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
+                "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
                 ('Demo User', 'demo@spendly.com', password_hash)
             )
             user_id = cursor.lastrowid
@@ -74,3 +74,135 @@ def seed_db():
                 sample_expenses
             )
             conn.commit()
+
+
+def get_user_by_username(username):
+    """Get a user record by username"""
+    with sqlite3.connect(DATABASE) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT id, username, email, password_hash, created_at FROM users WHERE username = ?",
+            (username,)
+        )
+        row = cursor.fetchone()
+        if row:
+            return {
+                'id': row[0],
+                'username': row[1],
+                'email': row[2],
+                'password_hash': row[3],
+                'created_at': row[4]
+            }
+        return None
+
+
+def get_user_by_id(user_id):
+    """Get a user record by ID"""
+    with sqlite3.connect(DATABASE) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT id, username, email, password_hash, created_at FROM users WHERE id = ?",
+            (user_id,)
+        )
+        row = cursor.fetchone()
+        if row:
+            return {
+                'id': row[0],
+                'username': row[1],
+                'email': row[2],
+                'password_hash': row[3],
+                'created_at': row[4]
+            }
+        return None
+
+
+def get_summary_stats(user_id):
+    """Get summary statistics for a user's expenses"""
+    with sqlite3.connect(DATABASE) as conn:
+        cursor = conn.cursor()
+
+        # Get total spent and transaction count
+        cursor.execute(
+            """
+            SELECT
+                COUNT(*) as transaction_count,
+                COALESCE(SUM(amount), 0) as total_spent
+            FROM expenses
+            WHERE user_id = ?
+            """,
+            (user_id,)
+        )
+        result = cursor.fetchone()
+        transaction_count = result[0] if result else 0
+        total_spent = result[1] if result else 0.0
+
+        # Get top category
+        cursor.execute(
+            """
+            SELECT category, SUM(amount) as category_total
+            FROM expenses
+            WHERE user_id = ?
+            GROUP BY category
+            ORDER BY category_total DESC
+            LIMIT 1
+            """,
+            (user_id,)
+        )
+        category_result = cursor.fetchone()
+        top_category = category_result[0] if category_result else None
+
+        return {
+            'total_spent': total_spent,
+            'transaction_count': transaction_count,
+            'top_category': top_category
+        }
+
+
+def get_recent_transactions(user_id, limit=5):
+    """Get recent transactions for a user"""
+    with sqlite3.connect(DATABASE) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT date, title as description, category, amount
+            FROM expenses
+            WHERE user_id = ?
+            ORDER BY date DESC, created_at DESC
+            LIMIT ?
+            """,
+            (user_id, limit)
+        )
+        rows = cursor.fetchall()
+        return [
+            {
+                'date': row[0],
+                'description': row[1],
+                'category': row[2],
+                'amount': row[3]
+            }
+            for row in rows
+        ]
+
+
+def get_category_breakdown(user_id):
+    """Get expense breakdown by category for a user"""
+    with sqlite3.connect(DATABASE) as conn:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT category, SUM(amount) as total
+            FROM expenses
+            WHERE user_id = ?
+            GROUP BY category
+            ORDER BY total DESC
+            """,
+            (user_id,)
+        )
+        rows = cursor.fetchall()
+        return [
+            {
+                'category': row[0],
+                'total': row[1]
+            }
+            for row in rows
+        ]
